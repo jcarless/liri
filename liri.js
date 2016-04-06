@@ -1,10 +1,9 @@
 var tweets = require('./keys.js');
-
 var spotify = require('spotify');
-var input = process.argv[3];
-
-var selection = process.argv[2];
 var fs = require('fs');
+var input = process.argv[3];	// MOVIE / SONG
+var selection = process.argv[2];	// COMMAND
+// LOG DATA TO TEXT FILE
 var log = function(data){
 	fs.appendFile('log.txt', data, function(err){
 		if (err) {
@@ -13,6 +12,7 @@ var log = function(data){
 	});
 };
 
+// -----TWEETS-------
 if (selection === 'my-tweets') {
 
 var params = {screen_name: 'knicksdynasty'};
@@ -21,12 +21,15 @@ var params = {screen_name: 'knicksdynasty'};
   		for (var i = 0; i < tweets.length; i++) {
 
   		console.log(tweets[i].text);
-  		log(tweets[i].text);
+  		console.log('--------------------------------------');
+  		log('(' + tweets[i].text + ')');
+  		log(' -----> ');
   			};
   		}
 	});
 }
 
+// -----SPOTIFY------
 if (selection === 'spotify-this-song') {
 
 	spotify.search({ type: 'track', query: input }, function(err, data) {
@@ -34,20 +37,22 @@ if (selection === 'spotify-this-song') {
 	        console.log('Error occurred: ' + err);
 	        return;
 	    }
+
 	 console.log(data.tracks.items[0].artists[0].name);
 	 console.log(data.tracks.items[0].name);
 	 console.log(data.tracks.items[0].preview_url);
 	 console.log(data.tracks.items[0].album.name);
 
-	 log(data.tracks.items[0].artists[0].name);
-	 log(data.tracks.items[0].name);
-	 log(data.tracks.items[0].preview_url);
-	 log(data.tracks.items[0].album.name);
+	 log('(' + data.tracks.items[0].artists[0].name + ' - ');
+	 log(data.tracks.items[0].name + ' - ');
+	 log(data.tracks.items[0].preview_url + ' - ');
+	 log(data.tracks.items[0].album.name + ')');
+		log(' -----> ');
 
-	    // Do something with 'data' 
 	});
 }
 
+// -----OMDB--------
 if (selection === 'movie-this') {
 	var request = require('request');
 request('http://www.omdbapi.com/?t=' + input + '&y=&plot=short&r=json', function (error, response, body) {
@@ -62,25 +67,27 @@ request('http://www.omdbapi.com/?t=' + input + '&y=&plot=short&r=json', function
 	console.log(json.Plot);
 	console.log(json.Actors);
 
-	log(json.Title);
-    log(json.Year);
-    log(json.Rated);
-	log(json.Country);
-	log(json.Language);
-	log(json.Plot);
+	log('(' + json.Title + ' - ');
+    log(json.Year + ' - ');
+    log(json.Rated + ' - ');
+	log(json.Country + ' - ');
+	log(json.Language + ' - ');
+	log(json.Plot + ' - ');
 	log(json.Actors);
+	log(' -----> ');
 
   }
 })
 };
 
+// -----DO WHAT IT SAYS-------
 if (selection === 'do-what-it-says') {
 	
 
 fs.readFile('random.txt', 'utf8', function(err, data){
 	
 	console.log(data);
-
+		// -----TWEETS------
 		if (data.startsWith('my-tweets')) {
 
 			var params = {screen_name: 'knicksdynasty'};
@@ -89,12 +96,14 @@ fs.readFile('random.txt', 'utf8', function(err, data){
 	  		for (var i = 0; i < tweets.length; i++) {
 
 	  		console.log(tweets[i].text);
-	  		log(tweets[i].text);
+  			console.log('--------------------------------------');
+  			log('(' + tweets[i].text + ')');
+  			log(' -----> ');
 	  				};
 	  			}
 			});
 		}
-
+		// ------SPOTIFY-------
 		if (data.startsWith('spotify-this-song')) {
 
 			input = data.slice(17).trim();
@@ -109,14 +118,14 @@ fs.readFile('random.txt', 'utf8', function(err, data){
 			 console.log(data.tracks.items[0].preview_url);
 			 console.log(data.tracks.items[0].album.name);
 
-			 log(data.tracks.items[0].artists[0].name);
-			 log(data.tracks.items[0].name);
-			 log(data.tracks.items[0].preview_url);
-			 log(data.tracks.items[0].album.name);
-			    // Do something with 'data' 
+			 log('(' + data.tracks.items[0].artists[0].name + ' - ');
+			 log(data.tracks.items[0].name + ' - ');
+			 log(data.tracks.items[0].preview_url + ' - ');
+			 log(data.tracks.items[0].album.name + ')');
+			 log(' -----> ');
 			});
 		}
-
+		// ----OMDB-------
 		if (data.startsWith('movie-this')) {
 
 			input = data.slice(11).trim();
@@ -135,13 +144,14 @@ fs.readFile('random.txt', 'utf8', function(err, data){
 			console.log(json.Plot);
 			console.log(json.Actors);
 
-			log(json.Title);
-		    log(json.Year);
-		    log(json.Rated);
-			log(json.Country);
-			log(json.Language);
-			log(json.Plot);
+			log('(' + json.Title + ' - ');
+		    log(json.Year + ' - ');
+		    log(json.Rated + ' - ');
+			log(json.Country + ' - ');
+			log(json.Language + ' - ');
+			log(json.Plot + ' - ');
 			log(json.Actors);
+			log(' -----> ');
 
 		  }
 		})
